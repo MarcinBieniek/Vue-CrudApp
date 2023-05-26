@@ -28,6 +28,20 @@
   const newTitle = ref("")
   const newState = ref("new")
 
+  const addBook = () => {
+    collection.push(
+      {
+        id: collection.length + 1,
+        author: newName.value,
+        title: newTitle.value,
+        state: newState.value
+      }
+    )
+
+    newName.value = ("")
+    newTitle.value = ("")
+  }
+
 </script>
 
 <template>
@@ -42,6 +56,8 @@
             <p class="number">{{ item.id }}</p>
             <p class="author">{{ item.author }}</p>
             <p class="title">{{ item.title }}</p>
+            <p class="state">{{ item.state }}</p>
+            <button class="button-delete">X</button>
           </li>
         </ul>
 
@@ -57,13 +73,11 @@
           </li>
         </ul>
 
-        {{newState}}
-
       </div>
     </div>
     <div class="right">
       <h2>Add new book</h2>
-      <form>
+      <form @submit.prevent="addBook">
         <label>Author name</label>
         <input
           type="text"
@@ -84,6 +98,7 @@
           <option value="new">New</option>
           <option value="used">Used</option>
         </select>
+        <button type="submit">Add new item</button>
       </form>
     </div>
   </div>
@@ -113,6 +128,8 @@
   .book {
     display: flex;
     cursor: pointer;
+    justify-content: center;
+    align-items: center;
   }
 
   .book:hover {
@@ -124,11 +141,20 @@
   }
 
   .author {
-    flex: 5;
+    flex: 4;
   }
 
   .title {
-    flex: 6;
+    flex: 4;
+  }
+
+  .state {
+    flex: 2;
+  }
+
+  .button-delete {
+    flex: 1;
+    width: 20px;
   }
 
   .wishlist {
@@ -149,6 +175,11 @@
 
   input {
     margin-bottom: 10px;
+  }
+
+  button {
+    margin: 20px 0px;
+    width: 50%;
   }
 
 </style>
