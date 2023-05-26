@@ -6,20 +6,27 @@
     {
       id: 1,
       author: "J.R.R. Tolkien",
-      title: "Lord of the Rings"
+      title: "Lord of the Rings",
+      state: "new"
     },
     {
       id: 2,
       author: "J.K. Rowling",
-      title: "Harry Potter"
+      title: "Harry Potter",
+      state: " used"
     },
     {
       id: 3,
       author: "Andrzej Sapkowski",
-      title: "The Witcher"
+      title: "The Witcher",
+      state: "new"
     }
   ])
   const wishlist = reactive([])
+
+  const newName = ref("")
+  const newTitle = ref("")
+  const newState = ref("new")
 
 </script>
 
@@ -28,8 +35,8 @@
   <div class="section">
     <div class="left">
       <div class="collection">
-        <h2>Books in collection</h2>
 
+        <h2>Books in collection</h2>
         <ul class="books">
           <li v-for="item in collection" :key="item.id" class="book">
             <p class="number">{{ item.id }}</p>
@@ -40,10 +47,45 @@
 
       </div>
       <div class="wishlist">
+
         <h2>My wishlist</h2>
+        <ul class="books">
+          <li v-for="{id, author, title} in wishlist" :key="id" class="book">
+            <p class="number">{{ id }}</p>
+            <p class="author">{{ author }}</p>
+            <p class="title">{{ title }}</p>
+          </li>
+        </ul>
+
+        {{newState}}
+
       </div>
     </div>
-    <div class="right">asd</div>
+    <div class="right">
+      <h2>Add new book</h2>
+      <form>
+        <label>Author name</label>
+        <input
+          type="text"
+          v-model.lazy="newName"
+          placeholder="Add name"
+        />
+        <label>Book title</label>
+        <input
+          type="text"
+          v-model.lazy="newTitle"
+          placeholder="Add title"
+        />
+        <label>New or user?</label>
+        <select
+          v-model.lazy="newState"
+          placeholder="Choose one"
+        >
+          <option value="new">New</option>
+          <option value="used">Used</option>
+        </select>
+      </form>
+    </div>
   </div>
 </template>
 
@@ -61,10 +103,32 @@
   .left {
     flex: 1;
     border: 1px solid grey;
+    margin-right: 10px;
   }
 
   .collection {
     padding: 20px;
+  }
+
+  .book {
+    display: flex;
+    cursor: pointer;
+  }
+
+  .book:hover {
+    color: red;
+  }
+
+  .number {
+    flex: 1;
+  }
+
+  .author {
+    flex: 5;
+  }
+
+  .title {
+    flex: 6;
   }
 
   .wishlist {
@@ -74,6 +138,17 @@
   .right {
     flex: 1;
     border: 1px solid grey;
+    margin-left: 10px;
+    padding: 20px;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+  }
+
+  input {
+    margin-bottom: 10px;
   }
 
 </style>
