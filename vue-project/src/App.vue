@@ -120,7 +120,9 @@
       </div>
     </div>
     <div class="right">
+
       <h2>Add new book</h2>
+
       <form @submit.prevent="addBook">
 
         <label>Choose shelf</label>
@@ -138,12 +140,14 @@
           v-model.lazy="newName"
           placeholder="Add name"
         />
+
         <label>Book title</label>
         <input
           type="text"
           v-model.lazy="newTitle"
           placeholder="Add title"
         />
+
         <label>New or used?</label>
         <select
           v-model.lazy="newState"
@@ -152,8 +156,10 @@
           <option value="new">New</option>
           <option value="used">Used</option>
         </select>
+
         <button type="submit">Add new item</button>
       </form>
+
     </div>
   </div>
 </template>
