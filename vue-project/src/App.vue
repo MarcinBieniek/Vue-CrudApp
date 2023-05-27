@@ -24,11 +24,15 @@
   ])
   const wishlist = reactive([])
 
+  const shelfType = ref("collection")
   const newName = ref("")
   const newTitle = ref("")
   const newState = ref("new")
 
   const addBook = () => {
+
+    if (shelfType.value == "collection") {
+
     collection.push(
       {
         id: collection.length + 1,
@@ -37,10 +41,35 @@
         state: newState.value
       }
     )
-
     newName.value = ("")
     newTitle.value = ("")
+
+    } else {
+      wishlist.push(
+        {
+          id: wishlist.length + 1,
+          author: newName.value,
+          title: newTitle.value,
+          state: newState.value
+        }
+      )
+      newName.value = ("")
+      newTitle.value = ("")
+    }
   }
+
+  const deleteBook = (id) => {
+    collection.splice(collection.findIndex(item => item.id === id), 1);
+  }
+
+  /*const editBook = (id, author, title, state) => {
+    const book = collection.find(item => item.id === id);
+    if (book) {
+      book.author = author;
+      book.title = title;
+      book.state = state;
+    }
+  };*/
 
 </script>
 
@@ -57,7 +86,12 @@
             <p class="author">{{ item.author }}</p>
             <p class="title">{{ item.title }}</p>
             <p class="state">{{ item.state }}</p>
-            <button class="button-delete">X</button>
+            <button
+              @click="editBook"
+              class="button-edit">Edit</button>
+            <button
+              @click="deleteBook(item.id)"
+              class="button-delete">X</button>
           </li>
         </ul>
 
@@ -65,11 +99,21 @@
       <div class="wishlist">
 
         <h2>My wishlist</h2>
-        <ul class="books">
-          <li v-for="{id, author, title} in wishlist" :key="id" class="book">
+
+        <p v-if="!wishlist.length">Wishlist is empty</p>
+
+        <ul v-else class="books">
+          <li v-for="{id, author, title, state} in wishlist" :key="id" class="book">
             <p class="number">{{ id }}</p>
             <p class="author">{{ author }}</p>
             <p class="title">{{ title }}</p>
+            <p class="state">{{ state }}</p>
+            <button
+              @click="editBook"
+              class="button-edit">Edit</button>
+            <button
+              @click="deleteBook(id)"
+              class="button-delete">X</button>
           </li>
         </ul>
 
@@ -78,6 +122,16 @@
     <div class="right">
       <h2>Add new book</h2>
       <form @submit.prevent="addBook">
+
+        <label>Choose shelf</label>
+        <select
+          v-model.lazy="shelfType"
+          placeholder="Choose one"
+        >
+          <option value="collection">Collection</option>
+          <option value="wishlist">Wishlist</option>
+        </select>
+
         <label>Author name</label>
         <input
           type="text"
@@ -90,7 +144,7 @@
           v-model.lazy="newTitle"
           placeholder="Add title"
         />
-        <label>New or user?</label>
+        <label>New or used?</label>
         <select
           v-model.lazy="newState"
           placeholder="Choose one"
@@ -132,10 +186,6 @@
     align-items: center;
   }
 
-  .book:hover {
-    color: red;
-  }
-
   .number {
     flex: 1;
   }
@@ -149,12 +199,13 @@
   }
 
   .state {
-    flex: 2;
+    flex: 1;
   }
 
-  .button-delete {
+  .button-delete, .button-edit {
     flex: 1;
     width: 20px;
+    margin-right: 5px;
   }
 
   .wishlist {
@@ -173,12 +224,12 @@
     flex-direction: column;
   }
 
-  input {
+  input, select {
     margin-bottom: 10px;
   }
 
   button {
-    margin: 20px 0px;
+    margin: 10px 0px;
     width: 50%;
   }
 
